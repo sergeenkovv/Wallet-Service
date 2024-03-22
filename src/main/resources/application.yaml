@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Wallet-Service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Wallet_Service_db
+    username: ivan
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/changelog.xml
+    default-schema: migration
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+
+  security:
+    jwt:
+      #      я закодировал в base64 passwordforIvangigachadovich
+      secret: cGFzc3dvcmRmb3JJdmFuZ2lnYWNoYWRvdmljaA==
+      access: 3600000
+      refresh: 2592000000
+    redirect:
+      url: http://localhost:8080/auth/sign-in
+
+app:
+  common:
+    logging:
+      enabled: true
+      level: WARN
