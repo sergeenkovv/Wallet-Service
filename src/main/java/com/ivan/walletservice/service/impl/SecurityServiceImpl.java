@@ -30,15 +30,16 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
-    public Player registration(SecurityDto dto) {
-        Optional<Player> player = playerRepository.findByLogin(dto.getLogin());
+    public Player registration(String login, String password) {
+        Optional<Player> player = playerRepository.findByLogin(login);
+
         if (player.isPresent()) {
             throw new RegisterException("The player with this login already exists.");
         }
 
         Player newplayer = Player.builder()
-                .login(dto.getLogin())
-                .password(passwordEncoder.encode(dto.getPassword()))
+                .login(login)
+                .password(passwordEncoder.encode(password))
                 .balance(new BigDecimal(0))
                 .build();
         return playerRepository.save(newplayer);
@@ -46,14 +47,15 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
-    public JwtResponse authorization(SecurityDto dto) {
-        Optional<Player> optionalPlayer = playerRepository.findByLogin(dto.getLogin());
+    public JwtResponse authorization(String login, String password) {
+        Optional<Player> optionalPlayer = playerRepository.findByLogin(login);
+
         if (optionalPlayer.isEmpty()) {
             throw new AuthorizeException("There is no player with this login in the database.");
         }
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getLogin(), dto.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
 
-        String accessToken = jwtTokenProvider.createAccessToken(dto.getLogin());
-        return new JwtResponse(dto.getLogin(), accessToken);
+        String accessToken = jwtTokenProvider.createAccessToken(login);
+        return new JwtResponse(login, accessToken);
     }
 }

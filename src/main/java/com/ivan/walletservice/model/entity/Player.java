@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-//@data с jpa entity использовать не советуется. геттер сеттер из ломбока можно использовать, equals и хэшкод самому переопределять. всё кроме equals и хэшкода можно использовать
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

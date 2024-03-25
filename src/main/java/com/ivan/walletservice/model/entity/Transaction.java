@@ -1,6 +1,5 @@
 package com.ivan.walletservice.model.entity;
 
-import com.ivan.walletservice.model.type.IdentifierType;
 import com.ivan.walletservice.model.type.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,9 +24,6 @@ public class Transaction {
 
     @Builder.Default
     private BigDecimal amount = BigDecimal.ZERO;
-
-    @Enumerated(EnumType.STRING)
-    private IdentifierType identifierType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id")

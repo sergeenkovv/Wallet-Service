@@ -7,7 +7,10 @@ import com.ivan.walletservice.model.entity.Player;
 import com.ivan.walletservice.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,15 +20,15 @@ public class SecurityController {
     private final SecurityService securityService;
     private final PlayerMapper playerMapper;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/registration")
     public ResponseEntity<?> registration(@RequestBody SecurityDto dto) {
-        Player player = securityService.registration(dto);
+        Player player = securityService.registration(dto.getLogin(), dto.getPassword());
         return ResponseEntity.ok(playerMapper.toDto(player));
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/authorization")
     public ResponseEntity<?> authorization(@RequestBody SecurityDto dto) {
-        JwtResponse response = securityService.authorization(dto);
+        JwtResponse response = securityService.authorization(dto.getLogin(), dto.getPassword());
         return ResponseEntity.ok(response);
     }
 }

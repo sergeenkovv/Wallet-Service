@@ -38,9 +38,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="DECIMAL(10, 2)"/>
-            <column name="identifier_type" type="VARCHAR(28)">
-                <constraints nullable="false"/>
-            </column>
             <column name="player_id" type="BIGINT"/>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="player_id" baseTableName="transaction" baseTableSchemaName="develop"
