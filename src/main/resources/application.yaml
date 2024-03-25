@@ -27,7 +27,6 @@ spring:
       #      я закодировал в base64 passwordforIvangigachadovich
       secret: cGFzc3dvcmRmb3JJdmFuZ2lnYWNoYWRvdmljaA==
       access: 3600000
-      refresh: 2592000000
     redirect:
       url: http://localhost:8080/auth/sign-in
 
@@ -35,4 +34,4 @@ app:
   common:
     logging:
       enabled: true
-      level: WARN
+      level: TRACE

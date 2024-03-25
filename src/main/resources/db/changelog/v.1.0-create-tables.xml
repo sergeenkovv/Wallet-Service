@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.10.xsd">
+
+    <changeSet id="v.1.0-create-tables" author="ivan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="player"/>
+            </not>
+        </preConditions>
+        <createTable tableName="player" schemaName="develop">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="DECIMAL(10, 2)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="v.1.1-create-tables" author="ivan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="transaction"/>
+            </not>
+        </preConditions>
+        <createTable tableName="transaction" schemaName="develop">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(24)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(10, 2)"/>
+            <column name="identifier_type" type="VARCHAR(28)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="player_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="player_id" baseTableName="transaction" baseTableSchemaName="develop"
+                                 constraintName="fk_player_id"
+                                 referencedColumnNames="id" referencedTableName="player"
+                                 referencedTableSchemaName="develop"/>
+    </changeSet>
+</databaseChangeLog>
