@@ -1,9 +1,8 @@
 package com.ivan.walletservice.service.impl;
 
 import com.ivan.walletservice.dto.JwtResponse;
-import com.ivan.walletservice.dto.SecurityDto;
-import com.ivan.walletservice.exception.AuthorizeException;
-import com.ivan.walletservice.exception.RegisterException;
+import com.ivan.walletservice.exception.AuthorizationException;
+import com.ivan.walletservice.exception.RegistrationException;
 import com.ivan.walletservice.model.entity.Player;
 import com.ivan.walletservice.repository.PlayerRepository;
 import com.ivan.walletservice.security.JwtTokenProvider;
@@ -34,7 +33,7 @@ public class SecurityServiceImpl implements SecurityService {
         Optional<Player> player = playerRepository.findByLogin(login);
 
         if (player.isPresent()) {
-            throw new RegisterException("The player with this login already exists.");
+            throw new RegistrationException("The player with this login already exists.");
         }
 
         Player newplayer = Player.builder()
@@ -51,7 +50,7 @@ public class SecurityServiceImpl implements SecurityService {
         Optional<Player> optionalPlayer = playerRepository.findByLogin(login);
 
         if (optionalPlayer.isEmpty()) {
-            throw new AuthorizeException("There is no player with this login in the database.");
+            throw new AuthorizationException("There is no player with this login in the database.");
         }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
 
