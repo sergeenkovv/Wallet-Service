@@ -12,5 +12,5 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TransactionMapper {
 
-    List<TransactionResponse> toDTOList(List<Transaction> entities);
+    List<TransactionResponse> toDtoList(List<Transaction> entities);
 }
