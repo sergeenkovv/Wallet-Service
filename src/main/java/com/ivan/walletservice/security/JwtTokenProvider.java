@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -55,7 +56,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (RuntimeException e) {
-            return false;
+            throw new AccessDeniedException("Access problems!");
         }
     }
 }

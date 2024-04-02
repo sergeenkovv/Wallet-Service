@@ -6,7 +6,7 @@ spring:
     name: Wallet-Service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/Wallet_Service_db
+    url: jdbc:postgresql://localhost:5436/Wallet_Service_db
     username: ivan
     password: 123
     driver-class-name: org.postgresql.Driver
@@ -24,14 +24,9 @@ spring:
 
   security:
     jwt:
-      #      я закодировал в base64 passwordforIvangigachadovich
       secret: cGFzc3dvcmRmb3JJdmFuZ2lnYWNoYWRvdmljaA==
       access: 3600000
-    redirect:
-      url: http://localhost:8080/auth/sign-in
 
-app:
-  common:
-    logging:
-      enabled: true
-      level: TRACE
+logging:
+  level:
+    root: INFO
