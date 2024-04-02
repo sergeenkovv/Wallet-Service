@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/players")
+@RequestMapping("/api/players")
 public class PlayerController {
 
     private final PlayerService playerService;
@@ -26,7 +26,7 @@ public class PlayerController {
     @GetMapping("/balance")
     public ResponseEntity<?> getBalance(@RequestParam String login) {
         if (!SecurityUtils.isValidLogin((login))) return ResponseEntity.badRequest()
-                .body(new ExceptionResponse("Incorrect login"));
+                .body(new ExceptionResponse("Incorrect login!"));
         Player player = playerService.getByLogin(login);
         return ResponseEntity.ok(playerMapper.toDto(player));
     }
@@ -34,28 +34,28 @@ public class PlayerController {
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(@RequestParam String login) {
         if (!SecurityUtils.isValidLogin(login)) return ResponseEntity.badRequest()
-                .body(new ExceptionResponse("Incorrect login"));
+                .body(new ExceptionResponse("Incorrect login!"));
         Player player = playerService.getByLogin(login);
-        List<TransactionResponse> playerHistory = transactionMapper.toDTOList(
+        List<TransactionResponse> playerHistory = transactionMapper.toDtoList(
                 transactionService.getPlayerHistory(player.getId()));
         return ResponseEntity.ok().body(new TransactionHistoryResponse(login, playerHistory));
     }
 
     @PostMapping("/transactions/debit")
     public ResponseEntity<?> debit(@RequestBody TransactionRequest request) {
-        if (!SecurityUtils.isValidLogin(request.getPlayerLogin())) return ResponseEntity.badRequest()
+        if (!SecurityUtils.isValidLogin(request.playerLogin())) return ResponseEntity.badRequest()
                 .body(new ExceptionResponse("Incorrect login"));
-        Player player = playerService.getByLogin(request.getPlayerLogin());
-        transactionService.debit(request.getAmount(), player.getId());
+        Player player = playerService.getByLogin(request.playerLogin());
+        transactionService.debit(request.amount(), player.getId());
         return ResponseEntity.ok(new SuccessResponse("Transaction completed successfully!"));
     }
 
     @PostMapping("/transactions/credit")
     public ResponseEntity<?> credit(@RequestBody TransactionRequest request) {
-        if (!SecurityUtils.isValidLogin(request.getPlayerLogin())) return ResponseEntity.badRequest()
+        if (!SecurityUtils.isValidLogin(request.playerLogin())) return ResponseEntity.badRequest()
                 .body(new ExceptionResponse("Incorrect login"));
-        Player player = playerService.getByLogin(request.getPlayerLogin());
-        transactionService.credit(request.getAmount(), player.getId());
+        Player player = playerService.getByLogin(request.playerLogin());
+        transactionService.credit(request.amount(), player.getId());
         return ResponseEntity.ok(new SuccessResponse("Transaction completed successfully!"));
     }
 }

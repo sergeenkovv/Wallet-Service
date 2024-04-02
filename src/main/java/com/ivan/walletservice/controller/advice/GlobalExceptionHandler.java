@@ -2,16 +2,15 @@ package com.ivan.walletservice.controller.advice;
 
 import com.ivan.walletservice.dto.ExceptionResponse;
 import com.ivan.walletservice.exception.*;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
@@ -21,72 +20,66 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
-    public ResponseEntity<ExceptionResponse> handleException(AuthorizationException e) {
+    public ResponseEntity<ExceptionResponse> handleAuthorizationException(AuthorizationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ExceptionResponse("Unauthorized! More information: " + e.getMessage()));
     }
 
-    @ExceptionHandler(PlayerNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleException(PlayerNotFoundException e) {
+    @ExceptionHandler(PlayerAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handlePlayerAlreadyExistsException(PlayerAlreadyExistsException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(e.getMessage()));
     }
 
-    @ExceptionHandler(PlayerAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleException(PlayerAlreadyExistsException e) {
+    @ExceptionHandler(PlayerNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handlePlayerNotFoundException(PlayerNotFoundException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(e.getMessage()));
     }
 
     @ExceptionHandler(RegistrationException.class)
-    public ResponseEntity<ExceptionResponse> handleException(RegistrationException e) {
+    public ResponseEntity<ExceptionResponse> handleRegistrationException(RegistrationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse("Unable to register! More information: " + e.getMessage()));
     }
 
     @ExceptionHandler(TransactionOperationException.class)
-    public ResponseEntity<ExceptionResponse> handleException(TransactionOperationException e) {
+    public ResponseEntity<ExceptionResponse> handleTransactionOperationException(TransactionOperationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ExceptionResponse> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(e.getMessage()));
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ExceptionResponse> handleIllegalStateException(IllegalStateException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(e.getMessage()));
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ExceptionResponse> handleIllegalStateException(AuthenticationException e) {
+    public ResponseEntity<ExceptionResponse> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ExceptionResponse(e.getMessage()));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ExceptionResponse> handleIllegalStateException(BadCredentialsException e) {
+    public ResponseEntity<ExceptionResponse> handleBadCredentialsException(BadCredentialsException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ExceptionResponse(e.getMessage()));
+                .body(new ExceptionResponse("Invalid user credentials!"));
     }
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ExceptionResponse> handleIllegalStateException(ExpiredJwtException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ExceptionResponse("Your token has expired. Please log in again. More information: " + e.getMessage()));
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionResponse("You don't have access! More information: " + e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
         StringBuilder msg = new StringBuilder();
@@ -98,7 +91,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ExceptionResponse> handleConstraintViolationException(ConstraintViolationException e) {
         StringBuilder msg = new StringBuilder();
         for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
@@ -108,9 +100,15 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionResponse(msg.toString()));
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionResponse> handleNullPointerException(NullPointerException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionResponse("Invalid request! Check the request body! More information: " + e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ExceptionResponse("Sorry, mistake on our side! More information: " + e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponse("Page not found! More information:" + e.getMessage()));
     }
 }
