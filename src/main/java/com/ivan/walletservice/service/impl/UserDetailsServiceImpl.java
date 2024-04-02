@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Player player = playerRepository.findByLogin(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username + "!"));
         return new User(player.getLogin(), player.getPassword(), Collections.emptyList());
     }
 }

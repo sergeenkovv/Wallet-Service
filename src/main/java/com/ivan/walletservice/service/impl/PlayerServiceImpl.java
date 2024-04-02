@@ -21,7 +21,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Transactional
     public void updateBalance(Long id, BigDecimal balance) {
         Player playerId = playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found."));
+                .orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found!"));
         playerId.setBalance(balance);
         playerRepository.save(playerId);
     }
@@ -29,7 +29,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public BigDecimal getPlayerBalance(Long id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found."))
+                .orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found!"))
                 .getBalance();
     }
 

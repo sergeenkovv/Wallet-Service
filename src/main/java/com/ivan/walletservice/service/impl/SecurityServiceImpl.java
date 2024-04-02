@@ -33,7 +33,7 @@ public class SecurityServiceImpl implements SecurityService {
         Optional<Player> player = playerRepository.findByLogin(login);
 
         if (player.isPresent()) {
-            throw new RegistrationException("The player with this login already exists.");
+            throw new RegistrationException("The player with this login already exists!");
         }
 
         Player newplayer = Player.builder()
@@ -50,7 +50,7 @@ public class SecurityServiceImpl implements SecurityService {
         Optional<Player> optionalPlayer = playerRepository.findByLogin(login);
 
         if (optionalPlayer.isEmpty()) {
-            throw new AuthorizationException("There is no player with this login in the database.");
+            throw new AuthorizationException("There is no player with this login in the database!");
         }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
 

@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.ivan.walletservice.model.type.TransactionType.*;
+import static com.ivan.walletservice.model.type.TransactionType.CREDIT;
+import static com.ivan.walletservice.model.type.TransactionType.DEBIT;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal playerBalance = playerService.getPlayerBalance(playerId);
 
         if (playerBalance.compareTo(amount) < 0) {
-            throw new TransactionOperationException("Insufficient funds.");
+            throw new TransactionOperationException("Insufficient funds!");
         }
 
         BigDecimal result = playerBalance.subtract(amount);
