@@ -7,12 +7,15 @@ import com.ivan.walletservice.model.entity.Player;
 import com.ivan.walletservice.security.SecurityUtils;
 import com.ivan.walletservice.service.PlayerService;
 import com.ivan.walletservice.service.TransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/players")
@@ -42,7 +45,7 @@ public class PlayerController {
     }
 
     @PostMapping("/transactions/debit")
-    public ResponseEntity<?> debit(@RequestBody TransactionRequest request) {
+    public ResponseEntity<?> debit(@RequestBody @Valid TransactionRequest request) {
         if (!SecurityUtils.isValidLogin(request.playerLogin())) return ResponseEntity.badRequest()
                 .body(new ExceptionResponse("Incorrect login"));
         Player player = playerService.getByLogin(request.playerLogin());
@@ -51,7 +54,7 @@ public class PlayerController {
     }
 
     @PostMapping("/transactions/credit")
-    public ResponseEntity<?> credit(@RequestBody TransactionRequest request) {
+    public ResponseEntity<?> credit(@RequestBody @Valid TransactionRequest request) {
         if (!SecurityUtils.isValidLogin(request.playerLogin())) return ResponseEntity.badRequest()
                 .body(new ExceptionResponse("Incorrect login"));
         Player player = playerService.getByLogin(request.playerLogin());

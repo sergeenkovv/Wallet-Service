@@ -12,14 +12,10 @@
         </preConditions>
         <createTable tableName="player" schemaName="develop">
             <column name="id" type="BIGSERIAL">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
-            <column name="login" type="VARCHAR(64)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="password" type="VARCHAR(256)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="login" type="VARCHAR(64)"/>
+            <column name="password" type="VARCHAR(256)"/>
             <column name="balance" type="DECIMAL(10, 2)"/>
         </createTable>
     </changeSet>
@@ -32,11 +28,9 @@
         </preConditions>
         <createTable tableName="transaction" schemaName="develop">
             <column name="id" type="BIGSERIAL">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
-            <column name="type" type="VARCHAR(24)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="type" type="VARCHAR(24)"/>
             <column name="amount" type="DECIMAL(10, 2)"/>
             <column name="player_id" type="BIGINT"/>
         </createTable>

@@ -20,11 +20,8 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull
-//    @Column(unique = true)
     private String login;
 
-//    @NotNull
     private String password;
 
     @Builder.Default
