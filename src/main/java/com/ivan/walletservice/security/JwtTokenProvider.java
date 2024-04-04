@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * Class for JWT token operations.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
@@ -19,11 +22,20 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
     private Key key;
 
+    /**
+     * Initializes the key for JWT token signing using the provided secret from JwtProperties.
+     */
     @PostConstruct
     public void init() {
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
     }
 
+    /**
+     * Creates a new access token for the given login.
+     *
+     * @param login The user login for whom the token is created.
+     * @return The generated access token.
+     */
     public String createAccessToken(String login) {
         Claims claims = Jwts.claims().setSubject(login);
         Date now = new Date();
@@ -39,6 +51,12 @@ public class JwtTokenProvider {
         return accessToken;
     }
 
+    /**
+     * Extracts the user login from the provided token.
+     *
+     * @param token The JWT token from which the login is to be extracted.
+     * @return The user login extracted from the token.
+     */
     public String getLoginFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -48,6 +66,13 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
+    /**
+     * Validates the provided token.
+     *
+     * @param token The JWT token to be validated.
+     * @return true if the token is valid, false otherwise.
+     * @throws AccessDeniedException If there are issues validating the token.
+     */
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()

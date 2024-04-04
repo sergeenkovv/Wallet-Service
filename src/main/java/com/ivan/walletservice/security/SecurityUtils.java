@@ -6,9 +6,19 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
+/**
+ * Utility class for security-related operations.
+ */
 @UtilityClass
 public class SecurityUtils {
 
+    /**
+     * Checks if the provided login is valid based on the current security context.
+     *
+     * @param login The login to be validated.
+     * @return true if the login is valid, false otherwise.
+     * @throws SecurityException If the user is not authenticated.
+     */
     public boolean isValidLogin(String login) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();

@@ -13,6 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
+/**
+ * Service implementation for retrieving user details.
+ * This service provides user details for authentication and authorization.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,11 +24,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private PlayerRepository playerRepository;
 
+    /**
+     * Constructs a new UserDetailsServiceImpl with the given PlayerRepository.
+     *
+     * @param playerRepository The repository for accessing player data
+     */
     @Autowired
     public UserDetailsServiceImpl(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
     }
 
+    /**
+     * Load user details by username for authentication.
+     *
+     * @param username The username of the user
+     * @return UserDetails object containing user details
+     * @throws UsernameNotFoundException if the user is not found in the database
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Player player = playerRepository.findByLogin(username)

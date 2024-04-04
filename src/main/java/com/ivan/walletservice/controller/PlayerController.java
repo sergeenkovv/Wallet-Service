@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * PlayerController class that handles player-related API endpoints.
+ */
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +29,12 @@ public class PlayerController {
     private final PlayerMapper playerMapper;
     private final TransactionMapper transactionMapper;
 
+    /**
+     * Retrieves the balance for a player based on the provided login.
+     *
+     * @param login The login of the player.
+     * @return ResponseEntity<?> containing the player's balance.
+     */
     @GetMapping("/balance")
     public ResponseEntity<?> getBalance(@RequestParam String login) {
         if (!SecurityUtils.isValidLogin((login))) return ResponseEntity.badRequest()
@@ -34,6 +43,12 @@ public class PlayerController {
         return ResponseEntity.ok(playerMapper.toDto(player));
     }
 
+    /**
+     * Retrieves the transaction history for a player based on the provided login.
+     *
+     * @param login The login of the player.
+     * @return ResponseEntity<?> containing the player's transaction history.
+     */
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(@RequestParam String login) {
         if (!SecurityUtils.isValidLogin(login)) return ResponseEntity.badRequest()
@@ -44,6 +59,12 @@ public class PlayerController {
         return ResponseEntity.ok().body(new TransactionHistoryResponse(login, playerHistory));
     }
 
+    /**
+     * Processes a debit transaction for a player.
+     *
+     * @param request The TransactionRequest object containing transaction details.
+     * @return ResponseEntity<?> indicating the status of the transaction.
+     */
     @PostMapping("/transactions/debit")
     public ResponseEntity<?> debit(@RequestBody @Valid TransactionRequest request) {
         if (!SecurityUtils.isValidLogin(request.playerLogin())) return ResponseEntity.badRequest()
@@ -53,6 +74,12 @@ public class PlayerController {
         return ResponseEntity.ok(new SuccessResponse("Transaction completed successfully!"));
     }
 
+    /**
+     * Processes a credit transaction for a player.
+     *
+     * @param request The TransactionRequest object containing transaction details.
+     * @return ResponseEntity<?> indicating the status of the transaction.
+     */
     @PostMapping("/transactions/credit")
     public ResponseEntity<?> credit(@RequestBody @Valid TransactionRequest request) {
         if (!SecurityUtils.isValidLogin(request.playerLogin())) return ResponseEntity.badRequest()

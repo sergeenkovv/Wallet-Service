@@ -74,7 +74,7 @@ class SecurityServiceImplTest {
         Mockito.when(jwtTokenProvider.createAccessToken(player.getLogin())).thenReturn("testAccessToken");
 
         JwtResponse jwtResponse = securityServiceImpl.authorization(player.getLogin(), player.getPassword());
-        assertEquals(player.getLogin(), jwtResponse.username());
+        assertEquals(player.getLogin(), jwtResponse.login());
         assertEquals("testAccessToken", jwtResponse.accessToken());
     }
 

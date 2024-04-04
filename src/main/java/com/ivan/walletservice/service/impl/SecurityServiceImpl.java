@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+/**
+ * Implementation of the SecurityService interface providing registration and authorization functionalities.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,6 +30,14 @@ public class SecurityServiceImpl implements SecurityService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers a new player with the provided login and password.
+     *
+     * @param login    The login of the player to be registered.
+     * @param password The password of the player to be registered.
+     * @return The newly registered player.
+     * @throws RegistrationException If a player with the provided login already exists.
+     */
     @Transactional
     @Override
     public Player registration(String login, String password) {
@@ -44,6 +55,14 @@ public class SecurityServiceImpl implements SecurityService {
         return playerRepository.save(newplayer);
     }
 
+    /**
+     * Authenticates a player with the provided login and password.
+     *
+     * @param login    The login of the player to be authenticated.
+     * @param password The password of the player to be authenticated.
+     * @return A JwtResponse containing the generated access token for successful authentication.
+     * @throws AuthorizationException If there is no player with the provided login or authentication fails.
+     */
     @Transactional
     @Override
     public JwtResponse authorization(String login, String password) {
