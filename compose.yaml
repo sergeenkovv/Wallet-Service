@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:16.1
+    container_name: wallet_service_container
+    environment:
+      POSTGRES_USER: ivan
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: Wallet_Service_db
+    ports:
+      - "5436:5432"
