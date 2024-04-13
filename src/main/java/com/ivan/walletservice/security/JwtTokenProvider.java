@@ -4,9 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -71,7 +71,7 @@ public class JwtTokenProvider {
      *
      * @param token The JWT token to be validated.
      * @return true if the token is valid, false otherwise.
-     * @throws AccessDeniedException If there are issues validating the token.
+     * @throws SignatureException If there are issues validating the token.
      */
     public boolean validateToken(String token) {
         try {
@@ -80,8 +80,8 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (RuntimeException e) {
-            throw new AccessDeniedException("Access problems!");
+        } catch (SignatureException e) {
+            throw new SignatureException("Access problems! More: " + e.getMessage());
         }
     }
 }
