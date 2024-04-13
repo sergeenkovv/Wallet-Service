@@ -2,11 +2,11 @@ package com.ivan.walletservice.controller.advice;
 
 import com.ivan.walletservice.dto.ExceptionResponse;
 import com.ivan.walletservice.exception.*;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -131,13 +131,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handles AccessDeniedException and returns a Forbidden response with a custom message.
+     * Handles handleSignatureException and returns a Forbidden response with a custom message.
      *
-     * @param e The AccessDeniedException instance.
+     * @param e The SignatureException instance.
      * @return ResponseEntity<ExceptionResponse> containing the response.
      */
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ExceptionResponse> handleSignatureException(SignatureException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ExceptionResponse("You don't have access! More information: " + e.getMessage()));
     }
