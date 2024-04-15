@@ -2,6 +2,7 @@ package com.ivan.walletservice.controller.advice;
 
 import com.ivan.walletservice.dto.ExceptionResponse;
 import com.ivan.walletservice.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -140,6 +141,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleSignatureException(SignatureException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ExceptionResponse("You don't have access! More information: " + e.getMessage()));
+    }
+
+    /**
+     * Exception handler for handling ExpiredJwtException.
+     * Returns a response with status code FORBIDDEN and an ExceptionResponse.
+     *
+     * @param e the ExpiredJwtException thrown when a JWT token expires
+     * @return a response with status code FORBIDDEN and an ExceptionResponse
+     */
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ExceptionResponse> handleSignatureException(ExpiredJwtException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionResponse("Token has expired! More information: " + e.getMessage()));
     }
 
     /**

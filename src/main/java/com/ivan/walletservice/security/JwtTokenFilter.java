@@ -1,6 +1,7 @@
 package com.ivan.walletservice.security;
 
 import com.ivan.walletservice.service.impl.UserDetailsServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,6 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
      * @throws ServletException   if an error occurs during the servlet processing.
      * @throws IOException        if an input or output error occurs while reading from or writing to the servlet.
      * @throws SignatureException If there is an issue related to JWT signature verification.
+     * @throws ExpiredJwtException if the JWT token has expired
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -54,7 +56,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
             filterChain.doFilter(request, response);
-        } catch (SignatureException e) {
+        } catch (SignatureException | ExpiredJwtException e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }

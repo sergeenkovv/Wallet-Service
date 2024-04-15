@@ -71,17 +71,12 @@ public class JwtTokenProvider {
      *
      * @param token The JWT token to be validated.
      * @return true if the token is valid, false otherwise.
-     * @throws SignatureException If there are issues validating the token.
      */
     public boolean validateToken(String token) {
-        try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (SignatureException e) {
-            throw new SignatureException("Access problems! More: " + e.getMessage());
-        }
     }
 }
